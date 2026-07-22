@@ -13,9 +13,12 @@ Built as a local-first React and TypeScript Progressive Web App, it uses OpenCV.
   It uses a camera, so access it from a phone or a device with a webcam.
 </p>
 
-![demo](demo.gif)
-![screenshot](screenshot0.png)
-![screenshot](screenshot1.png)
+<p>
+  <img src="demo.gif" width="200">
+  <img src="screen0.png" width="200">
+  <img src="screen1.png" width="200">
+</p>
+
 
 ## Running from source
 
@@ -36,7 +39,7 @@ It also has an optional host service where you can run the service locally and p
 ## Quick start
 
 ```bash
-git clone <your-repository-url>
+git clone https://github.com/jayl-dev/ai-chess-coach
 cd chess-coach
 npm install
 npm run dev
@@ -106,3 +109,12 @@ No API key is required at build or deployment time. Users provide their own key 
 - Captured images are sent directly to the selected OpenRouter or Gemini model because vision recognition requires it.
 - Captured images and API keys are not sent to the optional Chess Coach host.
 - Before publishing, confirm that `.env`, `.env.*.local`, `.dev.vars*`, and `.data/` remain untracked.
+
+# Credits
+
+Most of the code was generated — I have multiple coding subscriptions and wanted to burn some tokens :)
+I used OpenCode, Codex, Antigravity, Claude Code, and a mix of models including GPT‑5.6, Gemini, GLM 5.2, and others.
+
+The graphic assets, in case you’re wondering, were also generated, with a bit of manual tweaking.
+
+This project was mainly a sandbox for learning and experimenting with different coding agents and LLMs.

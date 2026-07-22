@@ -19,7 +19,6 @@ Built as a local-first React and TypeScript Progressive Web App, it uses OpenCV.
   <img src="screen1.png" width="200">
 </p>
 
-
 ## Running from source
 
 The live webapp is a complete client-side PWA app—nothing is sent to any servers, and all settings and info are stored locally on your device. It only sends the camera captured image to the configured LLM when you ask it to.

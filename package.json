@@ -19,6 +19,7 @@
     "build:app": "npm run build -w client",
     "preview:cloudflare": "npm run build:app && wrangler dev",
     "deploy:cloudflare": "npm run build:app && wrangler deploy",
+    "deploy:pages": "npm run build:app && wrangler pages deploy client/dist --project-name=ai-chess-coach",
     "start": "cross-env NODE_ENV=production node server/dist/index.js",
     "lint": "npm run lint --workspaces --if-present",
     "typecheck": "npm run typecheck --workspaces --if-present",

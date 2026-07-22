@@ -5,8 +5,8 @@ Chess Coach is an experimental AI application that combines vision-capable Large
 Built as a local-first React and TypeScript Progressive Web App, it uses OpenCV.js and WebAssembly-compiled Stockfish 18 directly in the browser alongside multimodal AI APIs (Google Gemini & OpenRouter) for board recognition and strategic analysis. An optional Node.js LAN daemon provides zero-configuration desktop screen pairing.
 
 <h2 align="center">
-  <a href="https://chess-coach-bca.pages.dev"><strong><u>Live Webapp</u></strong></a><br />
-  (<a href="https://chess-coach-bca.pages.dev">https://chess-coach-bca.pages.dev</a>)
+  <a href="https://ai-chess-coach.pages.dev/"><strong><u>Live Webapp</u></strong></a><br />
+  (<a href="https://ai-chess-coach.pages.dev/">https://ai-chess-coach.pages.dev/</a>)
 </h2>
 
 <p align="center">

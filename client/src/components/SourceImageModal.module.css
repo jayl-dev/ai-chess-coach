@@ -1,0 +1,149 @@
+.backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(28, 31, 42, 0.58);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.dialog {
+  width: min(100%, 560px);
+  max-height: calc(100% - 20px);
+  overflow-y: auto;
+  padding: 20px;
+  border-radius: var(--panel-radius);
+  background: var(--panel-beige);
+  box-shadow: 0 28px 70px rgba(21, 26, 38, 0.34);
+  color: var(--text-dark);
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.title {
+  margin: 0;
+  font-family: "Fredoka One", cursive;
+  font-size: 23px;
+  line-height: 1.15;
+}
+
+.subtitle,
+.modelMessage {
+  margin: 4px 0 0;
+  font-size: 13px;
+  font-weight: 650;
+  opacity: 0.72;
+}
+
+.closeButton {
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--text-dark);
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 5px 12px rgba(34, 43, 56, 0.13);
+}
+
+.imageFrame {
+  display: grid;
+  place-items: center;
+  max-height: 52vh;
+  overflow: hidden;
+  margin-bottom: 16px;
+  border-radius: 18px;
+  background: #202431;
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.5);
+}
+
+.image {
+  display: block;
+  max-width: 100%;
+  max-height: 52vh;
+  object-fit: contain;
+}
+
+.label {
+  display: block;
+  margin-bottom: 7px;
+  font-size: 14px;
+  font-weight: 750;
+}
+
+.select {
+  width: 100%;
+  min-height: 46px;
+  padding: 0 40px 0 12px;
+  border: 2px solid rgba(34, 43, 56, 0.12);
+  border-radius: 13px;
+  background: rgba(255, 255, 255, 0.82);
+  color: var(--text-dark);
+  font: inherit;
+  font-weight: 700;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.primaryButton,
+.secondaryButton {
+  min-height: 44px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 14px;
+  color: var(--text-dark);
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.primaryButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--accent);
+  box-shadow:
+    0 6px 0 rgba(34, 43, 56, 0.12),
+    0 12px 22px rgba(34, 43, 56, 0.12);
+}
+
+.secondaryButton {
+  background: rgba(255, 255, 255, 0.68);
+}
+
+@media (max-width: 420px) {
+  .backdrop {
+    padding: 10px;
+  }
+
+  .dialog {
+    max-height: calc(100% - 8px);
+    padding: 16px;
+  }
+
+  .actions {
+    flex-direction: column-reverse;
+  }
+
+  .primaryButton,
+  .secondaryButton {
+    justify-content: center;
+    width: 100%;
+  }
+}

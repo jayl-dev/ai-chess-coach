@@ -1,0 +1,24 @@
+.scroll {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: auto;
+  padding: 0 16px 90px;
+  z-index: 10;
+}
+
+.scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.syncStatus {
+  margin: -2px 4px -7px;
+  color: #397565;
+  font-size: 12px;
+  line-height: 1.35;
+  text-align: center;
+}
+
+.syncError {
+  color: #b14545;
+}

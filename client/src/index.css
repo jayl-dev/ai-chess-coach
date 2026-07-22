@@ -1,0 +1,94 @@
+:root,
+[data-theme="mint"] {
+  --bg-gradient: linear-gradient(135deg, #a4f2d7 0%, #e1d6fc 100%);
+  /* Shared cream used by every beige content panel. */
+  --panel-beige: #fdf1d7;
+  --panel-radius: 12px;
+  --panel-shadow: 0 6px 16px rgba(226, 203, 167, 0.55), 0 16px 40px rgba(226, 203, 167, 0.28);
+  --surface: var(--panel-beige);
+  --header-bg: color-mix(in srgb, var(--accent) 72%, white);
+  --text-dark: #222b38;
+  --coral: #ff9393;
+  --teal: #5ddab9;
+  --teal-dark: #3ba388;
+  --lavender: #c2b5f5;
+  --board-light: #ececd1;
+  --board-dark: #769756;
+  --header-text-stroke: #2a2724;
+  --header-chess: #ffffff;
+  --header-coach: #fbe07a;
+  --header-toggle-track: #2a2827;
+  --header-toggle-border: color-mix(in srgb, var(--accent-dark) 72%, white);
+  --header-button-cream: #fbf1da;
+  --header-icon-dark: #373330;
+
+  --shadow-bubbly: 0 32px 64px rgba(22, 33, 48, 0.06), 0 12px 24px rgba(22, 33, 48, 0.03);
+  --shadow-glow: 0 20px 40px rgba(93, 218, 185, 0.35);
+  --highlight-bubbly:
+    inset 0 6px 12px rgba(255, 255, 255, 0.95), inset 0 -3px 6px rgba(0, 0, 0, 0.03);
+  --highlight-strong: inset 0 8px 16px rgba(255, 255, 255, 1), inset 0 -4px 8px rgba(0, 0, 0, 0.04);
+  --border-bubbly: 2px solid rgba(255, 255, 255, 0.85);
+
+  --accent: var(--teal);
+  --accent-dark: var(--teal-dark);
+  --accent-glow: 0 20px 40px rgba(93, 218, 185, 0.35);
+  --accent-pale: #e6f6f1;
+  --accent-track: #c2eedf;
+}
+
+[data-theme="coral"] {
+  --accent: var(--coral);
+  --accent-dark: #e07575;
+  --accent-glow: 0 20px 40px rgba(255, 147, 147, 0.35);
+  --accent-pale: #ffe7e7;
+  --accent-track: #f5d4d4;
+}
+
+[data-theme="lavender"] {
+  --accent: var(--lavender);
+  --accent-dark: #9b87e0;
+  --accent-glow: 0 20px 40px rgba(194, 181, 245, 0.35);
+  --accent-pale: #efeafb;
+  --accent-track: #ddd4f5;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  font-family: "Fredoka One", cursive;
+  background: var(--bg-gradient);
+  background-attachment: fixed;
+  color: var(--text-dark);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+@media (min-width: 481px) {
+  body {
+    background: linear-gradient(180deg, #2c2935, #15131a);
+  }
+}
+
+#root {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+button {
+  font-family: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}

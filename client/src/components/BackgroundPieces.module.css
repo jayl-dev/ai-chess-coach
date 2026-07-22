@@ -1,0 +1,36 @@
+.bgPieces {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.bgPiece {
+  position: absolute;
+}
+
+.bgPiece i {
+  display: block;
+  color: rgba(255, 255, 255, 0.4);
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.05));
+}
+
+.sizePawn i {
+  font-size: 60px;
+}
+
+.sizeKnight i {
+  font-size: 70px;
+}
+
+.sizeRook i {
+  font-size: 55px;
+}
+
+.sizeBishop i {
+  font-size: 65px;
+}

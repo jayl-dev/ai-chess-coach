@@ -1,0 +1,9 @@
+.card {
+  background: var(--panel-beige);
+  border-radius: var(--panel-radius);
+  padding: 20px;
+  box-shadow: var(--panel-shadow);
+  border: none;
+  position: relative;
+  z-index: 10;
+}

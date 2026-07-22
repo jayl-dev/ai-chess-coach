@@ -1,0 +1,84 @@
+.panel {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid rgba(34, 43, 56, 0.12);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.42);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+}
+
+.titleRow,
+.connectedRow,
+.addressRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.titleRow h3 {
+  font-size: 14px;
+}
+
+.dot {
+  width: 9px;
+  height: 9px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: #9aa4b2;
+}
+
+.connected {
+  background: #2cb664;
+  box-shadow: 0 0 0 3px rgba(44, 182, 100, 0.14);
+}
+
+.connectedRow {
+  justify-content: space-between;
+  margin-top: 8px;
+  color: #59687d;
+  font-size: 11px;
+}
+
+.addressRow {
+  margin-top: 9px;
+}
+
+.addressRow input {
+  min-width: 0;
+  flex: 1;
+  height: 38px;
+  padding: 0 10px;
+  border: 1.5px solid rgba(34, 43, 56, 0.35);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.72);
+  font: inherit;
+  font-size: 11px;
+}
+
+.addressRow button {
+  height: 38px;
+  padding: 0 12px;
+  border-radius: 10px;
+  background: var(--accent);
+  font-size: 12px;
+  box-shadow: 0 3px 7px rgba(34, 43, 56, 0.13);
+}
+
+.addressRow button:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
+.linkButton {
+  color: #59687d;
+  font-size: 11px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.message {
+  margin-top: 8px;
+  color: #59687d;
+  font-size: 11px;
+  line-height: 1.4;
+}

@@ -1,0 +1,236 @@
+.panel {
+  background: var(--panel-beige);
+  border-radius: var(--panel-radius);
+  padding: clamp(24px, 7vw, 36px) clamp(20px, 6vw, 30px) clamp(28px, 8vw, 40px);
+  box-shadow: var(--panel-shadow);
+  position: relative;
+  z-index: 10;
+  overflow: hidden;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.viewfinderStage {
+  width: 100%;
+  position: relative;
+}
+
+.viewfinder {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 16px;
+  background: linear-gradient(145deg, #26313a, #111820);
+  border: 4px solid var(--accent);
+  box-shadow:
+    inset 0 0 0 2px rgba(255, 255, 255, 0.12),
+    0 10px 22px rgba(34, 43, 56, 0.18);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  position: relative;
+  z-index: 2;
+}
+
+.sparkles {
+  position: absolute;
+  inset: -30px -24px -34px;
+  width: calc(100% + 48px);
+  height: calc(100% + 64px);
+  object-fit: fill;
+  pointer-events: none;
+  user-select: none;
+  z-index: 1;
+}
+
+.character {
+  position: absolute;
+  left: clamp(-17px, -3.8vw, -10px);
+  bottom: clamp(-20px, -4vw, -12px);
+  width: auto;
+  height: clamp(122px, 44vw, 190px);
+  max-height: 72%;
+  pointer-events: none;
+  user-select: none;
+  z-index: 5;
+  filter: drop-shadow(0 7px 5px rgba(67, 43, 37, 0.18));
+}
+
+.video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+
+.videoReady {
+  opacity: 1;
+}
+
+.viewfinder::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 45%, transparent 25%, rgba(0, 0, 0, 0.3));
+  pointer-events: none;
+  z-index: 1;
+}
+
+.boardGuide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  pointer-events: none;
+  --guide-color: #f1b84b;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.72));
+}
+
+.guideLocked {
+  --guide-color: #52e18b;
+}
+
+.guideSearching {
+  --guide-color: #f1b84b;
+}
+
+.guideFill {
+  fill: color-mix(in srgb, var(--guide-color) 8%, transparent);
+  stroke: none;
+}
+
+.guideOutline,
+.guideGridLine,
+.guideCorner {
+  vector-effect: non-scaling-stroke;
+  stroke: var(--guide-color);
+}
+
+.guideOutline {
+  fill: none;
+  stroke-width: 3px;
+}
+
+.guideGridLine {
+  stroke-width: 1px;
+  stroke-opacity: 0.72;
+}
+
+.guideCorner {
+  fill: var(--guide-color);
+  stroke-width: 2px;
+}
+
+.guideStatus {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 24px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(31, 37, 44, 0.78);
+  color: #ffd878;
+  font-size: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+}
+
+.guideStatusLocked {
+  color: #7df0a7;
+}
+
+.previewBoard {
+  width: 56%;
+  aspect-ratio: 1;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  transform: perspective(380px) rotateX(4deg);
+  border: 3px solid #fdf1d7;
+  box-shadow: 0 12px 22px rgba(0, 0, 0, 0.38);
+}
+
+.previewBoard span {
+  display: block;
+}
+
+.light {
+  background: var(--board-light);
+}
+.dark {
+  background: var(--board-dark);
+}
+
+.cameraIcon {
+  position: absolute;
+  right: 12px;
+  bottom: 10px;
+  z-index: 2;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 18px;
+}
+
+.corner {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  z-index: 2;
+  border-color: #ffffff;
+  border-style: solid;
+}
+
+.cornerTl {
+  top: 12px;
+  left: 12px;
+  border-width: 3px 0 0 3px;
+  border-radius: 8px 0 0;
+}
+.cornerTr {
+  top: 12px;
+  right: 12px;
+  border-width: 3px 3px 0 0;
+  border-radius: 0 8px 0 0;
+}
+.cornerBl {
+  bottom: 12px;
+  left: 12px;
+  border-width: 0 0 3px 3px;
+  border-radius: 0 0 0 8px;
+}
+.cornerBr {
+  right: 12px;
+  bottom: 12px;
+  border-width: 0 3px 3px 0;
+  border-radius: 0 0 8px;
+}
+
+@media (max-width: 340px) {
+  .panel {
+    padding-inline: 16px;
+  }
+
+  .character {
+    left: -12px;
+    bottom: -14px;
+    height: 118px;
+  }
+}

@@ -1,0 +1,12 @@
+node_modules
+.agents
+.opencode
+.data
+**/dist
+**/coverage
+**/public/vendor
+*.svg
+*.png
+Stars.json
+mockup.html
+**/package-lock.json

@@ -1,0 +1,15 @@
+.restoreBtn {
+  background: var(--panel-beige);
+  border: none;
+  border-radius: var(--panel-radius);
+  padding: 16px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 16px;
+  box-shadow: var(--panel-shadow);
+  margin-top: 8px;
+  cursor: pointer;
+  color: var(--text-dark);
+  font-family: inherit;
+  width: 100%;
+}

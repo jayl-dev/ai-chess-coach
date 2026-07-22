@@ -1,0 +1,56 @@
+.readyCard {
+  text-align: center;
+}
+
+.title {
+  text-align: center;
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 1.4;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.title span {
+  font-size: 19px;
+  text-transform: none;
+  letter-spacing: 0;
+  text-shadow: 0 2px 4px rgba(255, 255, 255, 0.9);
+}
+
+.sectionTitle {
+  font-weight: 700;
+  text-align: center;
+  font-size: 15px;
+  margin-bottom: 6px;
+}
+
+.textGroup {
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.6;
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.footer {
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
+  padding-top: 10px;
+  color: #4a5568;
+}
+
+.iconGold {
+  color: #d4af37;
+}
+
+.iconRed {
+  color: #e53e3e;
+}

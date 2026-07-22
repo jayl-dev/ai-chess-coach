@@ -1,0 +1,12 @@
+.screen {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  height: 100vh;
+  height: 100dvh;
+  background: var(--bg-gradient);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}

@@ -1,0 +1,112 @@
+.panel {
+  background: var(--panel-beige);
+  border-radius: var(--panel-radius);
+  box-shadow: var(--panel-shadow);
+  padding: 28px 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  z-index: 10;
+}
+
+.iconWrap {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: #a64b4b;
+  background: rgba(255, 147, 147, 0.28);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    0 8px 18px rgba(166, 75, 75, 0.14);
+  font-size: 25px;
+  margin-bottom: 14px;
+}
+
+.title {
+  font-size: 20px;
+  line-height: 1.15;
+  margin-bottom: 10px;
+}
+
+.message {
+  max-width: 300px;
+  color: #4a5568;
+  font-family: "Fredoka One", cursive;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.55;
+}
+
+.debugDetails {
+  width: 100%;
+  margin-top: 16px;
+  border: 1px solid rgba(34, 43, 56, 0.18);
+  border-radius: 12px;
+  background: rgba(34, 43, 56, 0.07);
+  text-align: left;
+}
+
+.debugDetails summary {
+  padding: 10px 12px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.debugDetails pre {
+  max-height: 220px;
+  overflow: auto;
+  padding: 0 12px 12px;
+  color: #394456;
+  font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1.45;
+  text-align: left;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  user-select: text;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.primaryAction,
+.secondaryAction {
+  min-height: 42px;
+  border-radius: 14px;
+  padding: 0 18px;
+  font-size: 14px;
+  box-shadow: 0 4px 8px rgba(34, 43, 56, 0.12);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-dark);
+  font-family: inherit;
+  font-weight: 400;
+  text-decoration: none;
+}
+
+.primaryAction {
+  background: var(--accent);
+  color: var(--text-dark);
+}
+
+.secondaryAction {
+  background: var(--header-button-cream);
+  border: 2px solid rgba(55, 51, 48, 0.18);
+}
+
+.primaryAction:focus-visible,
+.secondaryAction:focus-visible {
+  outline: 3px solid var(--accent-dark);
+  outline-offset: 2px;
+}

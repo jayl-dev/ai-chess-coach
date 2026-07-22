@@ -1,0 +1,31 @@
+.themePills {
+  display: flex;
+  background: #e6e2da;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow:
+    inset 0 3px 8px rgba(0, 0, 0, 0.08),
+    0 2px 4px rgba(255, 255, 255, 0.9);
+  border: none;
+  padding: 0;
+}
+
+.themePill {
+  padding: 8px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #555;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.themePill.active {
+  background: var(--accent);
+  color: var(--text-dark);
+  border-radius: 16px;
+  box-shadow:
+    inset 0 3px 6px rgba(255, 255, 255, 0.6),
+    0 4px 8px rgba(0, 0, 0, 0.1);
+}

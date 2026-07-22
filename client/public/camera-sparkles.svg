@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 720" role="img" aria-labelledby="title desc">
+  <title id="title">Camera frame sparkles</title>
+  <desc id="desc">A transparent overlay of coral stars, mint dots, and cream glints arranged around an empty camera frame area.</desc>
+  <defs>
+    <filter id="softShadow" x="-80%" y="-80%" width="260%" height="260%">
+      <feDropShadow dx="0" dy="3" stdDeviation="2" flood-color="#432b25" flood-opacity=".16"/>
+    </filter>
+    <symbol id="star" viewBox="0 0 48 48">
+      <path d="M24 2c3 13 8 18 22 22-14 4-19 9-22 22C20 33 15 28 2 24 15 20 20 15 24 2z"/>
+    </symbol>
+    <symbol id="glint" viewBox="0 0 32 32">
+      <path d="M16 2c2 8 6 12 14 14-8 2-12 6-14 14-2-8-6-12-14-14C10 14 14 10 16 2z"/>
+    </symbol>
+  </defs>
+
+  <!-- The center of this SVG is intentionally empty for the live camera image. -->
+  <g filter="url(#softShadow)">
+    <use href="#star" x="26" y="72" width="34" height="34" fill="#ff9393" transform="rotate(-8 43 89)"/>
+    <circle cx="42" cy="35" r="7" fill="#fffaf0"/>
+    <circle cx="75" cy="54" r="8" fill="#5ddab9"/>
+    <use href="#glint" x="105" y="23" width="22" height="22" fill="#fff4cf"/>
+
+    <use href="#star" x="736" y="28" width="38" height="38" fill="#ff9393" transform="rotate(7 755 47)"/>
+    <circle cx="717" cy="54" r="8" fill="#5ddab9"/>
+    <circle cx="772" cy="93" r="7" fill="#fffaf0"/>
+    <use href="#glint" x="747" y="135" width="24" height="24" fill="#fff4cf"/>
+
+    <circle cx="31" cy="604" r="8" fill="#5ddab9"/>
+    <use href="#glint" x="55" y="625" width="24" height="24" fill="#fff4cf"/>
+    <use href="#star" x="91" y="657" width="30" height="30" fill="#ff9393" transform="rotate(-12 106 672)"/>
+
+    <use href="#glint" x="742" y="579" width="25" height="25" fill="#fff4cf"/>
+    <use href="#star" x="724" y="631" width="36" height="36" fill="#ff9393" transform="rotate(12 742 649)"/>
+    <circle cx="772" cy="681" r="8" fill="#5ddab9"/>
+  </g>
+</svg>

@@ -1,0 +1,48 @@
+import type { Board } from "../types/app";
+
+export const mockPosition: Board = [
+  [
+    { color: "b", type: "R" },
+    null,
+    { color: "b", type: "B" },
+    null,
+    null,
+    { color: "b", type: "R" },
+    { color: "b", type: "K" },
+    null,
+  ],
+  [
+    { color: "b", type: "P" },
+    { color: "b", type: "P" },
+    null,
+    null,
+    null,
+    { color: "b", type: "P" },
+    { color: "b", type: "P" },
+    { color: "b", type: "P" },
+  ],
+  [null, null, { color: "b", type: "P" }, null, { color: "b", type: "P" }, null, null, null],
+  [null, null, null, null, null, null, null, null],
+  [null, null, null, null, null, { color: "w", type: "N" }, { color: "b", type: "P" }, null],
+  [null, null, null, null, null, null, null, null],
+  [
+    { color: "w", type: "P" },
+    { color: "w", type: "P" },
+    { color: "w", type: "P" },
+    null,
+    null,
+    { color: "w", type: "P" },
+    { color: "w", type: "P" },
+    null,
+  ],
+  [
+    { color: "w", type: "R" },
+    null,
+    null,
+    null,
+    null,
+    null,
+    { color: "w", type: "K" },
+    { color: "w", type: "R" },
+  ],
+];

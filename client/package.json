@@ -1,0 +1,43 @@
+{
+  "name": "chess-coach-client",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "tsc --noEmit && vite build",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --no-cache",
+    "test:watch": "vitest",
+    "lint": "eslint . --config ../eslint.config.js",
+    "format": "prettier --config ../.prettierrc.json --ignore-path ../.prettierignore --write .",
+    "format:check": "prettier --config ../.prettierrc.json --ignore-path ../.prettierignore --check ."
+  },
+  "dependencies": {
+    "@techstark/opencv-js": "^5.0.0-release.1",
+    "chess.js": "^1.4.0",
+    "framer-motion": "^12.42.2",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^6.28.0",
+    "stockfish": "^18.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.1.0",
+    "@testing-library/user-event": "^14.5.2",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "eslint": "^9.17.0",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "eslint-plugin-react-refresh": "^0.4.16",
+    "jsdom": "^25.0.1",
+    "prettier": "^3.4.2",
+    "typescript": "^5.6.3",
+    "typescript-eslint": "^8.18.2",
+    "vite": "^6.4.3",
+    "vitest": "^4.1.10"
+  }
+}

@@ -1,0 +1,61 @@
+.boardWrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  border: 5px solid #8fc9aa;
+  border-radius: 12px;
+  margin-bottom: 18px;
+  background: var(--board-dark);
+  box-shadow:
+    0 16px 32px rgba(0, 0, 0, 0.06),
+    inset 0 6px 12px rgba(255, 255, 255, 0.4);
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+  width: 100%;
+  height: 100%;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.sq {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.light {
+  background: var(--board-light);
+}
+
+.dark {
+  background: var(--board-dark);
+}
+
+.pcB {
+  color: #1a202c;
+  font-size: 28px;
+  line-height: 1;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.25));
+}
+
+.pcW {
+  color: #ffffff;
+  font-size: 28px;
+  -webkit-text-stroke: 1.5px #1a202c;
+  line-height: 1;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.25));
+}
+
+.boardOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+}

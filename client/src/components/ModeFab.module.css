@@ -1,0 +1,217 @@
+.container {
+  position: absolute;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 24px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 220px;
+  height: 64px;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  box-shadow:
+    0 24px 48px rgba(0, 0, 0, 0.08),
+    inset 0 6px 12px rgba(255, 255, 255, 0.8),
+    inset 0 -4px 8px rgba(0, 0, 0, 0.04);
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  z-index: 50;
+}
+
+.slot {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--text-dark);
+  cursor: pointer;
+  padding: 0;
+  z-index: 1;
+}
+
+.slotBusy {
+  cursor: default;
+}
+
+.slotIcon {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.podWrap {
+  position: absolute;
+  top: -6px;
+  left: -3px;
+  width: 76px;
+  height: 76px;
+  z-index: 3;
+  pointer-events: none;
+  cursor: grab;
+}
+
+.podWrap:active {
+  cursor: grabbing;
+}
+
+.pod {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 4px solid var(--accent);
+  box-shadow:
+    0 8px 0 rgba(0, 0, 0, 0.1),
+    0 20px 28px rgba(0, 0, 0, 0.22),
+    0 36px 56px rgba(0, 0, 0, 0.16),
+    var(--highlight-strong),
+    var(--accent-glow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-dark);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  pointer-events: auto;
+  will-change: transform;
+}
+
+.podFlare {
+  box-shadow:
+    0 8px 0 rgba(0, 0, 0, 0.1),
+    0 20px 28px rgba(0, 0, 0, 0.25),
+    0 36px 56px rgba(0, 0, 0, 0.18),
+    var(--highlight-strong),
+    0 0 0 6px rgba(93, 218, 185, 0.3),
+    0 28px 60px rgba(93, 218, 185, 0.6);
+}
+
+.podIcon {
+  font-size: 26px;
+  display: inline-block;
+  line-height: 1;
+}
+
+.iconWrap {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+}
+
+.iconWrap i {
+  grid-area: 1 / 1;
+}
+
+.burstWrap {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.ring {
+  position: absolute;
+  inset: 0;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  border: 3px solid var(--accent);
+  pointer-events: none;
+  box-sizing: border-box;
+}
+
+.particle {
+  position: absolute;
+  top: calc(50% - 4px);
+  left: calc(50% - 4px);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  pointer-events: none;
+  box-shadow: 0 0 8px rgba(93, 218, 185, 0.6);
+  will-change: transform, opacity;
+}
+
+.knightShadow {
+  position: absolute;
+  bottom: 18px;
+  left: 19px;
+  width: 60px;
+  height: 14px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 0, 0, 0.45) 0%,
+    rgba(0, 0, 0, 0.15) 50%,
+    transparent 75%
+  );
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 2;
+  will-change: transform, opacity;
+}
+
+.dustWrap {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.shockwave {
+  position: absolute;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  pointer-events: none;
+  box-sizing: border-box;
+  will-change: transform, opacity;
+}
+
+.ring {
+  border: 1.5px solid var(--accent);
+}
+
+.hintWrap {
+  position: absolute;
+  bottom: calc(100% + 12px);
+  left: 50%;
+  pointer-events: none;
+  z-index: 60;
+}
+
+.hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text-dark);
+  font-family: "Fredoka One", cursive;
+  font-size: 13px;
+  letter-spacing: 0.3px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  white-space: nowrap;
+}
+
+.hintIcon {
+  font-size: 11px;
+  color: var(--accent-dark);
+}

@@ -1,0 +1,19 @@
+{
+  "name": "Chess Coach",
+  "short_name": "Chess Coach",
+  "description": "Capture a chess board and get a locally analyzed move suggestion.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#a4f2d7",
+  "theme_color": "#91dbce",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

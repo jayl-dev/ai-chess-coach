@@ -1,0 +1,66 @@
+.card {
+  position: relative;
+  overflow: visible;
+}
+
+.hud {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 14px;
+  position: relative;
+}
+
+.bestMove {
+  font-weight: 700;
+  font-size: 17px;
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-shadow: 0 2px 4px rgba(255, 255, 255, 0.9);
+  color: var(--text-dark);
+}
+
+.kingIcon {
+  font-size: 20px;
+}
+
+.candyDec {
+  position: absolute;
+  width: 46px;
+  height: 30px;
+  object-fit: contain;
+  z-index: 20;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.1));
+}
+
+.candyTr {
+  top: -16px;
+  right: -14px;
+  transform: rotate(15deg);
+}
+
+.candyBl {
+  bottom: -16px;
+  left: -14px;
+  transform: rotate(-20deg);
+}
+
+.viewSourceButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 44px;
+  margin-top: 14px;
+  border: 2px solid rgba(34, 43, 56, 0.1);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.62);
+  color: var(--text-dark);
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 5px 12px rgba(34, 43, 56, 0.1);
+}

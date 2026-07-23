@@ -85,7 +85,7 @@ export function HostConnectionPanel({ host, onHostChange, prompt }: Props) {
               placeholder="Host address, or scan known hosts"
               aria-label="Screenshot host address"
             />
-            <button type="button" onClick={() => void discover()} disabled={busy}>
+            <button type="button" className="bubbly-accent-button" onClick={() => void discover()} disabled={busy}>
               {busy ? "Scanning…" : "Scan"}
             </button>
           </div>
@@ -100,6 +100,7 @@ export function HostConnectionPanel({ host, onHostChange, prompt }: Props) {
               />
               <button
                 type="button"
+                className="bubbly-accent-button"
                 onClick={() => void pair()}
                 disabled={busy || code.length !== 6}
               >

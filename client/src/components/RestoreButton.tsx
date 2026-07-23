@@ -7,7 +7,7 @@ type Props = {
 
 export function RestoreButton({ onClick, children }: Props) {
   return (
-    <button type="button" className={styles.restoreBtn} onClick={onClick}>
+    <button type="button" className={`${styles.restoreBtn} bubbly-secondary-button`} onClick={onClick}>
       {children}
     </button>
   );

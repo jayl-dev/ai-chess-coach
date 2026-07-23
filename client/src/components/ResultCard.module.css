@@ -48,19 +48,6 @@
 }
 
 .viewSourceButton {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
   width: 100%;
-  min-height: 44px;
   margin-top: 14px;
-  border: 2px solid rgba(34, 43, 56, 0.1);
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.62);
-  color: var(--text-dark);
-  font: inherit;
-  font-weight: 800;
-  cursor: pointer;
-  box-shadow: 0 5px 12px rgba(34, 43, 56, 0.1);
 }

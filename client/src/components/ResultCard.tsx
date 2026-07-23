@@ -43,7 +43,7 @@ export function ResultCard({ result, showArrow, showHighlights, onViewSource, so
       <ShowNextMoves moves={result.principalVariation} />
 
       {onViewSource && (
-        <button type="button" className={styles.viewSourceButton} onClick={onViewSource}>
+        <button type="button" className={`${styles.viewSourceButton} bubbly-secondary-button`} onClick={onViewSource}>
           <i className="fa-solid fa-image" aria-hidden="true" />
           {sourceMode === "camera" ? "View Camera Shot" : "View Screenshot"}
         </button>

@@ -164,7 +164,7 @@ export function SettingsCards({
         <div className={styles.keyActions}>
           <button
             type="button"
-            className={styles.actionButton}
+            className={`${styles.actionButton} bubbly-accent-button`}
             onClick={onSaveAndTestApiKey}
             disabled={connectionStatus.phase === "loading"}
           >

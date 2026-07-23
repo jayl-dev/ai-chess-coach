@@ -261,6 +261,58 @@ export async function analyzeCapturedImage(
   modelOverride?: string,
   onStage?: (stage: ProgressStage) => void,
 ): Promise<AnalysisResult> {
+  if (
+    import.meta.env.VITE_MOCK === "true" ||
+    import.meta.env.VITE_MOCK === "1" ||
+    import.meta.env.VITE_MOCK_MODE === "true" ||
+    import.meta.env.VITE_MOCK_MODE === "1"
+  ) {
+    const startedAt = performance.now();
+    onStage?.("reading-position");
+    await new Promise((r) => setTimeout(r, 200));
+    onStage?.("calculating-move");
+    await new Promise((r) => setTimeout(r, 200));
+    onStage?.("preparing-explanation");
+    await new Promise((r) => setTimeout(r, 200));
+
+    const mockFen = "r1b2rk1/pp3ppp/2p1p3/8/5Np1/8/PPP2PP1/R5KR w - - 0 1";
+    const chess = new Chess(mockFen);
+    return {
+      fen: mockFen,
+      board: boardFromChess(chess),
+      orientation: side,
+      sideToMove: side,
+      bestMove: {
+        uci: "e2f4",
+        san: "Nxf4",
+        from: "e2" as SquareName,
+        to: "f4" as SquareName,
+      },
+      evaluation: {
+        kind: "centipawn",
+        value: 120,
+        display: "+1.2",
+        label: "Winning",
+      },
+      explanation:
+        "Your knight grabs the f4 pawn. If they take back with the pawn, you reply with d5 to challenge the center. You're up material and have a better position!",
+      principalVariation: [
+        "1. Nxf4 gxf4",
+        "2. d5! challenging the center",
+        "3. Bxd7+ followed by Qxd7",
+      ],
+      confidence: "high",
+      notes: "Mock Mode enabled (VITE_MOCK=true). Real vision API bypassed.",
+      timings: {
+        captureMs: 120,
+        visionMs: 200,
+        engineMs: 200,
+        explanationMs: 200,
+        totalMs: Math.round(performance.now() - startedAt),
+      },
+    };
+  }
+
   const apiKey = loadApiKey(settings.provider, window.localStorage);
   if (!apiKey) {
     const providerName = settings.provider === "gemini" ? "Google Gemini" : "OpenRouter";

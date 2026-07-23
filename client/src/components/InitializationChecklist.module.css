@@ -12,7 +12,7 @@
 .card {
   width: min(100%, 440px);
   padding: 22px;
-  border-radius: 22px;
+  border-radius: var(--panel-radius);
   background: var(--panel-beige);
   color: var(--text-dark);
   box-shadow:

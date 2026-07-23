@@ -112,10 +112,10 @@ export function SourceImageModal({
         {modelMessage && <p className={styles.modelMessage}>{modelMessage}</p>}
 
         <div className={styles.actions}>
-          <button type="button" className={styles.secondaryButton} onClick={onClose}>
+          <button type="button" className={`${styles.secondaryButton} bubbly-secondary-button`} onClick={onClose}>
             Close
           </button>
-          <button type="button" className={styles.primaryButton} onClick={() => onAnalyze(model)}>
+          <button type="button" className={`${styles.primaryButton} bubbly-accent-button`} onClick={() => onAnalyze(model)}>
             <i className="fa-solid fa-wand-magic" aria-hidden="true" />
             Analyze Again
           </button>

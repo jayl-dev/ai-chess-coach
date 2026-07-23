@@ -1,12 +1,13 @@
 :root,
 [data-theme="mint"] {
   --bg-gradient: linear-gradient(135deg, #a4f2d7 0%, #e1d6fc 100%);
-  /* Shared cream used by every beige content panel. */
-  --panel-beige: #fdf1d7;
-  --panel-radius: 12px;
-  --panel-shadow: 0 6px 16px rgba(226, 203, 167, 0.55), 0 16px 40px rgba(226, 203, 167, 0.28);
-  --surface: var(--panel-beige);
+  /* Shared background image used by every beige content panel. */
+  --panel-beige: url('/panel.svg') center / 100% 100% no-repeat;
+  --panel-radius: 24px;
+  --panel-shadow: none;
+  --surface: #fdf1d7;
   --header-bg: color-mix(in srgb, var(--accent) 72%, white);
+  --header-border: #61d0ba;
   --text-dark: #222b38;
   --coral: #ff9393;
   --teal: #5ddab9;
@@ -39,6 +40,7 @@
 [data-theme="coral"] {
   --accent: var(--coral);
   --accent-dark: #e07575;
+  --header-border: #f27b7b;
   --accent-glow: 0 20px 40px rgba(255, 147, 147, 0.35);
   --accent-pale: #ffe7e7;
   --accent-track: #f5d4d4;
@@ -47,6 +49,7 @@
 [data-theme="lavender"] {
   --accent: var(--lavender);
   --accent-dark: #9b87e0;
+  --header-border: #b19df5;
   --accent-glow: 0 20px 40px rgba(194, 181, 245, 0.35);
   --accent-pale: #efeafb;
   --accent-track: #ddd4f5;
@@ -92,3 +95,105 @@ button {
   border: none;
   cursor: pointer;
 }
+
+/* Clean theme-accent button styled matching the header bar */
+.bubbly-accent-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 8px 20px;
+  border-radius: 999px;
+  border: 2.5px solid var(--header-border);
+  background: var(--header-bg);
+  color: var(--text-dark);
+  font-family: "Fredoka One", cursive;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.2),
+    0 3px 6px rgba(0, 0, 0, 0.03);
+  transition:
+    background-color 200ms ease,
+    border-color 200ms ease,
+    transform 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.bubbly-accent-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow:
+    inset 0 1px 3px rgba(255, 255, 255, 0.3),
+    0 4px 10px rgba(0, 0, 0, 0.06);
+}
+
+.bubbly-accent-button:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow:
+    inset 0 1px 1px rgba(0, 0, 0, 0.05),
+    0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.bubbly-accent-button:disabled {
+  opacity: 0.58;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Clean secondary pill button matching the header style without accent color */
+.bubbly-secondary-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 8px 20px;
+  border-radius: 999px;
+  border: 2.5px solid rgba(55, 51, 48, 0.18);
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--text-dark);
+  font-family: "Fredoka One", cursive;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.6),
+    0 3px 6px rgba(0, 0, 0, 0.03);
+  transition:
+    background-color 200ms ease,
+    border-color 200ms ease,
+    transform 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.bubbly-secondary-button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.88);
+  transform: translateY(-1px);
+  box-shadow:
+    inset 0 1px 3px rgba(255, 255, 255, 0.8),
+    0 4px 10px rgba(0, 0, 0, 0.06);
+}
+
+.bubbly-secondary-button:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow:
+    inset 0 1px 1px rgba(0, 0, 0, 0.05),
+    0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.bubbly-secondary-button:disabled {
+  opacity: 0.58;
+  cursor: not-allowed;
+  transform: none;
+}
+

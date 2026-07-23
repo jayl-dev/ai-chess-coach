@@ -417,11 +417,11 @@ export function InitializationChecklist({
           {complete ? (
             <>
               {checks.some((check) => check.phase !== "ready") ? (
-                <button type="button" className={styles.secondaryButton} onClick={retry}>
+                <button type="button" className={`${styles.secondaryButton} bubbly-secondary-button`} onClick={retry}>
                   Run checks again
                 </button>
               ) : null}
-              <button type="button" className={styles.primaryButton} onClick={onContinue}>
+              <button type="button" className={`${styles.primaryButton} bubbly-accent-button`} onClick={onContinue}>
                 Continue
               </button>
             </>

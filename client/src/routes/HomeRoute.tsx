@@ -183,8 +183,16 @@ export default function HomeRoute({
   const analysisRun = useRef(0);
   const analysisWatchdog = useRef<number | null>(null);
   const queryMockOutcome = new URLSearchParams(location.search).get("mock");
+  const envMockMode =
+    import.meta.env.VITE_MOCK === "true" ||
+    import.meta.env.VITE_MOCK === "1" ||
+    import.meta.env.VITE_MOCK_MODE === "true" ||
+    import.meta.env.VITE_MOCK_MODE === "1";
   const usesMockCapture =
-    mockOutcome !== undefined || queryMockOutcome === "success" || queryMockOutcome === "error";
+    envMockMode ||
+    mockOutcome !== undefined ||
+    queryMockOutcome === "success" ||
+    queryMockOutcome === "error";
 
   useEffect(
     () => () => {

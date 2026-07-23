@@ -25,12 +25,12 @@ export function ErrorPanel({ error, onRetry, onOpenSettings }: Props) {
       ) : null}
       <div className={styles.actions}>
         {error.retryable && (
-          <button type="button" className={styles.primaryAction} onClick={onRetry}>
+          <button type="button" className={`${styles.primaryAction} bubbly-accent-button`} onClick={onRetry}>
             Try again
           </button>
         )}
         {error.settingsAction && (
-          <button type="button" className={styles.secondaryAction} onClick={onOpenSettings}>
+          <button type="button" className={`${styles.secondaryAction} bubbly-secondary-button`} onClick={onOpenSettings}>
             Open settings
           </button>
         )}

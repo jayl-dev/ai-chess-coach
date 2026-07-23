@@ -25,6 +25,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  border: 1px solid rgba(0, 0, 0, 0.09);
+  box-sizing: border-box;
 }
 
 .light {
@@ -36,18 +38,19 @@
 }
 
 .pcB {
-  color: #1a202c;
-  font-size: 28px;
+  color: #222b38;
+  font-size: clamp(22px, 6vw, 32px);
   line-height: 1;
-  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.25));
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.45);
+  filter: none;
 }
 
 .pcW {
   color: #ffffff;
-  font-size: 28px;
-  -webkit-text-stroke: 1.5px #1a202c;
+  font-size: clamp(22px, 6vw, 32px);
   line-height: 1;
-  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.25));
+  -webkit-text-stroke: 1px rgba(42, 39, 36, 0.45);
+  filter: none;
 }
 
 .boardOverlay {

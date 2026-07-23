@@ -5,7 +5,8 @@ const scopeUrl = new URL("./", self.registration.scope);
 const coreAssets = [
   "./",
   "./manifest.webmanifest",
-  "./app-icon.svg",
+  "./icon-192.png",
+  "./icon-512.png",
   "./logo.png",
   "./main.png",
   "./initializing.png",

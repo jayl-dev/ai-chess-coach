@@ -6,6 +6,8 @@ import { ThemePills } from "./ThemePills";
 import type {
   AccentTheme,
   AsyncStatus,
+  LiveChessA1Pos,
+  OpenAiPromptStyle,
   RecognitionEffort,
   VisionModel,
   VisionProviderId,
@@ -15,6 +17,12 @@ type Props = {
   model: string;
   provider: VisionProviderId;
   onProviderChange: (provider: VisionProviderId) => void;
+  openaiBaseUrl: string;
+  onOpenaiBaseUrlChange: (url: string) => void;
+  openaiPromptStyle: OpenAiPromptStyle;
+  onOpenaiPromptStyleChange: (style: OpenAiPromptStyle) => void;
+  openaiA1Pos: LiveChessA1Pos;
+  onOpenaiA1PosChange: (pos: LiveChessA1Pos) => void;
   models: VisionModel[];
   modelStatus: AsyncStatus;
   onReloadModels: () => void;
@@ -51,6 +59,12 @@ export function SettingsCards({
   model,
   provider,
   onProviderChange,
+  openaiBaseUrl,
+  onOpenaiBaseUrlChange,
+  openaiPromptStyle,
+  onOpenaiPromptStyleChange,
+  openaiA1Pos,
+  onOpenaiA1PosChange,
   models,
   modelStatus,
   onReloadModels,
@@ -103,10 +117,60 @@ export function SettingsCards({
             options={[
               { id: "openrouter", label: "OpenRouter" },
               { id: "gemini", label: "Google Gemini (Direct)" },
+              { id: "openai", label: "OpenAI Compatible" },
             ]}
             ariaLabel="Vision model provider"
           />
         </div>
+        {provider === "openai" && (
+          <>
+            <div className={styles.row}>
+              <span>Base URL</span>
+              <input
+                className={styles.keyInput}
+                style={{ width: "60%", margin: 0 }}
+                type="text"
+                value={openaiBaseUrl}
+                onChange={(e) => onOpenaiBaseUrlChange(e.target.value)}
+                placeholder="https://api.openai.com/v1"
+                spellCheck={false}
+              />
+            </div>
+            <div className={styles.row}>
+              <span>Prompt Format</span>
+              <Dropdown
+                value={openaiPromptStyle}
+                onChange={(val) => onOpenaiPromptStyleChange(val as OpenAiPromptStyle)}
+                options={[
+                  { id: "llm", label: "Vision LLM Prompt" },
+                  { id: "livechess2fen", label: "LiveChess2FEN Prompt" },
+                ]}
+                ariaLabel="OpenAI prompt style"
+              />
+            </div>
+            {openaiPromptStyle === "livechess2fen" && (
+              <div className={styles.row}>
+                <span>a1_pos (Square Location)</span>
+                <Dropdown
+                  value={openaiA1Pos}
+                  onChange={(val) => onOpenaiA1PosChange(val as LiveChessA1Pos)}
+                  options={[
+                    { id: "BL", label: "BL (Bottom-Left)" },
+                    { id: "BR", label: "BR (Bottom-Right)" },
+                    { id: "TL", label: "TL (Top-Left)" },
+                    { id: "TR", label: "TR (Top-Right)" },
+                  ]}
+                  ariaLabel="LiveChess2FEN a1_pos parameter"
+                />
+              </div>
+            )}
+            <p className={styles.preferenceHint}>
+              {openaiPromptStyle === "livechess2fen"
+                ? "Sends LiveChess2FEN prompt format (OPENAI_API_SPEC.md) with a1_pos parameter."
+                : "Sends standard multimodal vision prompt used by Vision LLMs."}
+            </p>
+          </>
+        )}
         <div className={styles.row}>
           <span>Current Model:</span>
           <Dropdown
@@ -149,7 +213,11 @@ export function SettingsCards({
           High asks the vision model to independently review and correct its result before analysis.
         </p>
         <label className={styles.keyLabel} htmlFor="vision-provider-api-key">
-          {provider === "gemini" ? "Google Gemini API Key" : "OpenRouter API Key"}
+          {provider === "gemini"
+            ? "Google Gemini API Key"
+            : provider === "openai"
+              ? "OpenAI API Token / Key"
+              : "OpenRouter API Key"}
         </label>
         <input
           id="vision-provider-api-key"

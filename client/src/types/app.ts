@@ -1,4 +1,6 @@
-export type VisionProviderId = "openrouter" | "gemini";
+export type VisionProviderId = "openrouter" | "gemini" | "openai";
+export type OpenAiPromptStyle = "llm" | "livechess2fen";
+export type LiveChessA1Pos = "BL" | "BR" | "TL" | "TR";
 export type CaptureMode = "camera" | "monitor";
 export type SideToMove = "white" | "black";
 export type CastlingRights = "none" | "king" | "queen" | "both";
@@ -26,6 +28,9 @@ export type SquareName = `${BoardFile}${BoardRank}`;
 export type AppSettings = {
   model: string;
   provider: VisionProviderId;
+  openaiBaseUrl: string;
+  openaiPromptStyle: OpenAiPromptStyle;
+  openaiA1Pos: LiveChessA1Pos;
   recognitionEffort: RecognitionEffort;
   assumeSideToMoveAtBottom: boolean;
   depth: number;

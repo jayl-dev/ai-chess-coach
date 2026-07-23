@@ -1,4 +1,4 @@
-import type { ConnectionTestResponse, ModelListResponse, VisionProviderId } from "../types/app";
+import type { ConnectionTestResponse, ModelListResponse, VisionModel, VisionProviderId } from "../types/app";
 import { loadApiKey, loadLocalApiKey } from "../state/settings";
 
 type ApiErrorBody = { error?: { message?: unknown } };
@@ -125,13 +125,107 @@ async function fetchDirectVisionModels(): Promise<ModelListResponse> {
   return { models };
 }
 
+const FALLBACK_OPENAI_MODELS: VisionModel[] = [
+  {
+    id: "livechess2fen",
+    name: "livechess2fen",
+    description: "LiveChess2FEN Image-to-FEN Model",
+    contextLength: null,
+    isCurated: true,
+    isFree: true,
+  },
+  {
+    id: "gpt-4-vision-preview",
+    name: "gpt-4-vision-preview",
+    description: "OpenAI GPT-4 Vision Model",
+    contextLength: null,
+    isCurated: true,
+    isFree: false,
+  },
+];
+
+function getOpenAiModelsEndpoint(baseUrl: string): string {
+  const trimmed = baseUrl.trim().replace(/\/+$/, "");
+  if (!trimmed) throw new ApiError("Enter an OpenAI Base URL first.", 400);
+  if (trimmed.endsWith("/models")) return trimmed;
+  if (trimmed.endsWith("/v1")) return `${trimmed}/models`;
+  return `${trimmed}/v1/models`;
+}
+
+export async function fetchOpenAiModels(
+  baseUrl: string,
+  apiKey?: string,
+): Promise<ModelListResponse> {
+  if (!baseUrl.trim()) return { models: FALLBACK_OPENAI_MODELS };
+  const endpoint = getOpenAiModelsEndpoint(baseUrl);
+  let response: Response;
+  try {
+    response = await fetch(endpoint, {
+      headers: {
+        Accept: "application/json",
+        ...(apiKey ? { Authorization: `Bearer ${apiKey}` } : {}),
+      },
+    });
+  } catch (error) {
+    return { models: FALLBACK_OPENAI_MODELS };
+  }
+
+  if (!response.ok) {
+    return { models: FALLBACK_OPENAI_MODELS };
+  }
+
+  let body: any;
+  try {
+    body = await response.json();
+  } catch {
+    return { models: FALLBACK_OPENAI_MODELS };
+  }
+
+  const modelList = Array.isArray(body?.data)
+    ? body.data
+    : Array.isArray(body?.models)
+      ? body.models
+      : [];
+  if (!modelList.length) {
+    return { models: FALLBACK_OPENAI_MODELS };
+  }
+
+  const models: VisionModel[] = modelList.map((m: any) => {
+    const id =
+      typeof m.id === "string"
+        ? m.id
+        : typeof m.name === "string"
+          ? m.name
+          : "livechess2fen";
+    return {
+      id,
+      name: id,
+      description: "OpenAI-compatible model.",
+      contextLength: typeof m.context_length === "number" ? m.context_length : null,
+      isCurated: id === "livechess2fen" || id === "gpt-4-vision-preview",
+      isFree: id === "livechess2fen",
+    };
+  });
+
+  return { models };
+}
+
 export function fetchVisionModels(
   provider: VisionProviderId,
   apiKey?: string,
+  baseUrl?: string,
 ): Promise<ModelListResponse> {
-  return provider === "gemini"
-    ? fetchGeminiModels(apiKey || loadApiKey("gemini", window.localStorage))
-    : fetchDirectVisionModels();
+  if (provider === "gemini") {
+    return fetchGeminiModels(apiKey || loadApiKey("gemini", window.localStorage));
+  }
+  if (provider === "openai") {
+    if (!baseUrl?.trim()) return Promise.resolve({ models: FALLBACK_OPENAI_MODELS });
+    return fetchOpenAiModels(
+      baseUrl.trim(),
+      apiKey || loadApiKey("openai", window.localStorage),
+    );
+  }
+  return fetchDirectVisionModels();
 }
 
 const GEMINI_BASE_URL = "https://generativelanguage.googleapis.com/v1beta";
@@ -223,11 +317,61 @@ export async function fetchGeminiModels(apiKey: string): Promise<ModelListRespon
   return { models };
 }
 
+export async function testOpenAiConnection(
+  baseUrl: string,
+  apiKey?: string,
+): Promise<ConnectionTestResponse> {
+  const endpoint = getOpenAiModelsEndpoint(baseUrl);
+  let response: Response;
+  try {
+    response = await fetch(endpoint, {
+      headers: {
+        Accept: "application/json",
+        ...(apiKey ? { Authorization: `Bearer ${apiKey}` } : {}),
+      },
+    });
+  } catch (error) {
+    throw new ApiError(
+      error instanceof Error
+        ? `Could not reach OpenAI server: ${error.message}`
+        : "Could not reach OpenAI server.",
+      0,
+    );
+  }
+
+  if (!response.ok) {
+    let message = `OpenAI endpoint returned status ${response.status}.`;
+    try {
+      const errJson = await response.json();
+      if (errJson?.error?.message) message = errJson.error.message;
+    } catch {}
+    throw new ApiError(message, response.status);
+  }
+
+  let hostLabel = "OpenAI Compatible";
+  try {
+    hostLabel = new URL(endpoint).host;
+  } catch {}
+
+  return {
+    ok: true as const,
+    label: hostLabel,
+    isFreeTier: null,
+    limitRemaining: null,
+  };
+}
+
 export function testVisionConnection(
   provider: VisionProviderId,
   apiKey?: string,
+  baseUrl?: string,
 ): Promise<ConnectionTestResponse> {
-  return provider === "gemini" ? testGeminiConnection(apiKey) : testOpenRouterConnection(apiKey);
+  if (provider === "gemini") return testGeminiConnection(apiKey);
+  if (provider === "openai") {
+    if (!baseUrl?.trim()) return Promise.reject(new ApiError("Enter an OpenAI Base URL first.", 400));
+    return testOpenAiConnection(baseUrl.trim(), apiKey);
+  }
+  return testOpenRouterConnection(apiKey);
 }
 
 export async function testGeminiConnection(apiKey?: string): Promise<ConnectionTestResponse> {

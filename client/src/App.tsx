@@ -58,7 +58,11 @@ export default function App() {
 
   const saveAndTestApiKey = async (apiKey: string): Promise<ConnectionTestResponse> => {
     const trimmedKey = apiKey.trim();
-    const result = await testVisionConnection(settings.provider, trimmedKey || undefined);
+    const result = await testVisionConnection(
+      settings.provider,
+      trimmedKey || undefined,
+      settings.openaiBaseUrl,
+    );
     if (trimmedKey) {
       if (!saveApiKey(settings.provider, trimmedKey, window.localStorage)) {
         throw new Error("This browser could not save the API key locally.");

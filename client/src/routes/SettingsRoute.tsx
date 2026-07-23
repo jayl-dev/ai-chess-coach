@@ -99,8 +99,29 @@ const FALLBACK_GEMINI_MODELS: VisionModel[] = [
   },
 ];
 
+const FALLBACK_OPENAI_MODELS: VisionModel[] = [
+  {
+    id: "livechess2fen",
+    name: "livechess2fen",
+    description: "LiveChess2FEN Image-to-FEN Model.",
+    contextLength: null,
+    isCurated: true,
+    isFree: true,
+  },
+  {
+    id: "gpt-4-vision-preview",
+    name: "gpt-4-vision-preview",
+    description: "OpenAI GPT-4 Vision Model.",
+    contextLength: null,
+    isCurated: true,
+    isFree: false,
+  },
+];
+
 function fallbackModelsFor(provider: AppSettings["provider"]): VisionModel[] {
-  return provider === "gemini" ? FALLBACK_GEMINI_MODELS : FALLBACK_OPENROUTER_MODELS;
+  if (provider === "gemini") return FALLBACK_GEMINI_MODELS;
+  if (provider === "openai") return FALLBACK_OPENAI_MODELS;
+  return FALLBACK_OPENROUTER_MODELS;
 }
 
 export default function SettingsRoute({
@@ -119,7 +140,12 @@ export default function SettingsRoute({
     message: "Loading image-capable models…",
   });
   const [apiKey, setApiKey] = useState("");
-  const providerName = settings.provider === "gemini" ? "Google Gemini" : "OpenRouter";
+  const providerName =
+    settings.provider === "gemini"
+      ? "Google Gemini"
+      : settings.provider === "openai"
+        ? "OpenAI Compatible"
+        : "OpenRouter";
   const [connectionStatus, setConnectionStatus] = useState<AsyncStatus>({
     phase: "idle",
     message: hasApiKey
@@ -128,7 +154,12 @@ export default function SettingsRoute({
   });
 
   useEffect(() => {
-    const nextProviderName = settings.provider === "gemini" ? "Google Gemini" : "OpenRouter";
+    const nextProviderName =
+      settings.provider === "gemini"
+        ? "Google Gemini"
+        : settings.provider === "openai"
+          ? "OpenAI Compatible"
+          : "OpenRouter";
     const providerHasKey = Boolean(loadApiKey(settings.provider, window.localStorage));
     setApiKey("");
     setConnectionStatus({
@@ -142,7 +173,7 @@ export default function SettingsRoute({
   const loadModels = useCallback(() => {
     setModelStatus({ phase: "loading", message: "Loading image-capable models…" });
     setModels(fallbackModelsFor(settings.provider));
-    void fetchVisionModels(settings.provider)
+    void fetchVisionModels(settings.provider, undefined, settings.openaiBaseUrl)
       .then(({ models: discoveredModels }) => {
         setModels(
           discoveredModels.length ? discoveredModels : fallbackModelsFor(settings.provider),
@@ -155,7 +186,7 @@ export default function SettingsRoute({
           message: error instanceof Error ? error.message : "Could not load model choices.",
         });
       });
-  }, [settings.provider]);
+  }, [settings.provider, settings.openaiBaseUrl]);
 
   useEffect(() => loadModels(), [loadModels]);
 
@@ -205,6 +236,12 @@ export default function SettingsRoute({
           model={settings.model}
           provider={settings.provider}
           onProviderChange={(provider) => onSettingsChange({ provider })}
+          openaiBaseUrl={settings.openaiBaseUrl}
+          onOpenaiBaseUrlChange={(openaiBaseUrl) => onSettingsChange({ openaiBaseUrl })}
+          openaiPromptStyle={settings.openaiPromptStyle}
+          onOpenaiPromptStyleChange={(openaiPromptStyle) => onSettingsChange({ openaiPromptStyle })}
+          openaiA1Pos={settings.openaiA1Pos}
+          onOpenaiA1PosChange={(openaiA1Pos) => onSettingsChange({ openaiA1Pos })}
           models={models}
           modelStatus={modelStatus}
           onReloadModels={loadModels}

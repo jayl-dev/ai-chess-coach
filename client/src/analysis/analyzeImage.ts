@@ -1,6 +1,6 @@
 import { Chess } from "chess.js";
 import { analyzeWithStockfish } from "./stockfish";
-import { getVisionProvider, type VisionProvider } from "./visionProviders";
+import { getVisionProvider, type ProviderContentPart, type VisionProvider } from "./visionProviders";
 import { loadApiKey } from "../state/settings";
 import type {
   AnalysisResult,
@@ -111,39 +111,96 @@ async function recognizePosition(
   onValidation?: () => void,
 ): Promise<VisionPosition> {
   const imageUrl = await blobToDataUrl(image);
-  const orientationInstruction = settings.assumeSideToMoveAtBottom
-    ? `The user confirms that ${side} is at the bottom of the image.`
-    : "Do not assume which color is at the bottom. Determine orientation from visible coordinates or the board presentation, and mention uncertainty in notes.";
-  const castlingDescription =
-    castlingRights === "both"
-      ? "both king-side and queen-side"
-      : castlingRights === "king"
-        ? "king-side only"
-        : castlingRights === "queen"
-          ? "queen-side only"
-          : "no";
-  const castlingInstruction = `The user confirms that ${side} has ${castlingDescription} castling rights. Set that side's symbols in FEN field 3 accordingly. Include opposing castling rights only when the position supports them and you are confident they remain available.`;
-  const requestText = `Read all 64 squares of the complete chess board. ${side} moves next, so FEN field 2 must be '${side === "white" ? "w" : "b"}'. ${orientationInstruction} ${castlingInstruction} En passant is not tracked, so FEN field 4 must be '-'. Return a legal six-field FEN.`;
-  const responseShape =
-    "Return only JSON with fen, orientation (white or black, meaning the color at the bottom), confidence (high|medium|low), and notes. Never analyze the position or suggest a move.";
-  const content = await provider.generateContent({
-    model,
-    temperature: 0,
-    systemPrompt: `You read chess positions from images. ${responseShape}`,
-    userParts: [
-      { type: "text", text: requestText },
-      { type: "image", dataUrl: imageUrl },
-    ],
-  });
-  let position = parseJson<VisionPosition>(content);
-  if (!position || typeof position.fen !== "string") {
-    throw new Error("The vision model did not return a FEN position.");
+  let position: VisionPosition;
+
+  if (settings.provider === "openai" && settings.openaiPromptStyle === "livechess2fen") {
+    const computedA1Pos = side === "black" ? "TR" : (settings.openaiA1Pos || "BL");
+    const promptText = `Predict FEN string for chessboard. a1_pos: ${computedA1Pos}`;
+    const content = await provider.generateContent({
+      model,
+      temperature: 0,
+      systemPrompt: "",
+      userParts: [
+        { type: "text", text: promptText },
+        { type: "image", dataUrl: imageUrl },
+      ],
+    });
+
+    let fenStr = content.trim();
+    fenStr = fenStr.replace(/^```[a-z]*\s*/i, "").replace(/\s*```$/, "").trim();
+
+    try {
+      const parsedObj = JSON.parse(fenStr) as { fen?: unknown };
+      if (parsedObj && typeof parsedObj.fen === "string") {
+        fenStr = parsedObj.fen.trim();
+      }
+    } catch {
+      // Keep raw fenStr
+    }
+
+    const fields = fenStr.split(/\s+/);
+    if (fields.length === 1 && fields[0]) {
+      const activeColor = side === "white" ? "w" : "b";
+      fenStr = `${fields[0]} ${activeColor} - - 0 1`;
+    }
+
+    position = { fen: fenStr };
+  } else {
+    const orientationInstruction = settings.assumeSideToMoveAtBottom
+      ? `The user confirms that ${side} is at the bottom of the image.`
+      : "Do not assume which color is at the bottom. Determine orientation from visible coordinates or the board presentation, and mention uncertainty in notes.";
+    const castlingDescription =
+      castlingRights === "both"
+        ? "both king-side and queen-side"
+        : castlingRights === "king"
+          ? "king-side only"
+          : castlingRights === "queen"
+            ? "queen-side only"
+            : "no";
+    const castlingInstruction = `The user confirms that ${side} has ${castlingDescription} castling rights. Set that side's symbols in FEN field 3 accordingly. Include opposing castling rights only when the position supports them and you are confident they remain available.`;
+    const requestText = `Read all 64 squares of the complete chess board. ${side} moves next, so FEN field 2 must be '${side === "white" ? "w" : "b"}'. ${orientationInstruction} ${castlingInstruction} En passant is not tracked, so FEN field 4 must be '-'. Return a legal six-field FEN.`;
+    const responseShape =
+      "Return only JSON with fen, orientation (white or black, meaning the color at the bottom), confidence (high|medium|low), and notes. Never analyze the position or suggest a move.";
+    const content = await provider.generateContent({
+      model,
+      temperature: 0,
+      systemPrompt: `You read chess positions from images. ${responseShape}`,
+      userParts: [
+        { type: "text", text: requestText },
+        { type: "image", dataUrl: imageUrl },
+      ],
+    });
+    let parsed = parseJson<VisionPosition>(content);
+    if (!parsed || typeof parsed.fen !== "string") {
+      throw new Error("The vision model did not return a FEN position.");
+    }
+    position = parsed;
   }
+
   position.fen = applyKnownPositionState(position.fen, side, castlingRights);
 
-  if (settings.recognitionEffort === "high") {
+  if (
+    settings.recognitionEffort === "high" &&
+    !(settings.provider === "openai" && settings.openaiPromptStyle === "livechess2fen")
+  ) {
     onValidation?.();
     let validationFeedback = fenValidationError(position.fen, side, castlingRights);
+    const orientationInstruction = settings.assumeSideToMoveAtBottom
+      ? `The user confirms that ${side} is at the bottom of the image.`
+      : "Do not assume which color is at the bottom. Determine orientation from visible coordinates or the board presentation, and mention uncertainty in notes.";
+    const castlingDescription =
+      castlingRights === "both"
+        ? "both king-side and queen-side"
+        : castlingRights === "king"
+          ? "king-side only"
+          : castlingRights === "queen"
+            ? "queen-side only"
+            : "no";
+    const castlingInstruction = `The user confirms that ${side} has ${castlingDescription} castling rights. Set that side's symbols in FEN field 3 accordingly. Include opposing castling rights only when the position supports them and you are confident they remain available.`;
+    const requestText = `Read all 64 squares of the complete chess board. ${side} moves next, so FEN field 2 must be '${side === "white" ? "w" : "b"}'. ${orientationInstruction} ${castlingInstruction} En passant is not tracked, so FEN field 4 must be '-'. Return a legal six-field FEN.`;
+    const responseShape =
+      "Return only JSON with fen, orientation (white or black, meaning the color at the bottom), confidence (high|medium|low), and notes. Never analyze the position or suggest a move.";
+
     for (let pass = 0; pass < 2; pass += 1) {
       const reviewContent = await provider.generateContent({
         model,
@@ -232,8 +289,22 @@ async function explainMove(
   bestMove: string,
   evaluation: string,
   variation: string[],
+  settings: AppSettings,
+  imageUrl?: string,
 ): Promise<string> {
+  if (settings.provider === "openai" && settings.openaiPromptStyle === "livechess2fen") {
+    return `${bestMove} is Stockfish's top choice for this position. Follow the suggested continuation while watching for your opponent's reply.`;
+  }
   try {
+    const userParts: ProviderContentPart[] = [
+      {
+        type: "text",
+        text: `FEN: ${fen}\nBest move: ${bestMove}\nEvaluation: ${evaluation}\nEngine line: ${variation.join(" ")}`,
+      },
+    ];
+    if (imageUrl) {
+      userParts.push({ type: "image", dataUrl: imageUrl });
+    }
     return await provider.generateContent({
       model,
       temperature: 0.35,
@@ -241,12 +312,7 @@ async function explainMove(
       timeoutMs: 20_000,
       systemPrompt:
         "You are a friendly chess coach. Explain the engine move accurately in one to three short sentences. Do not invent tactics not supported by the supplied line.",
-      userParts: [
-        {
-          type: "text",
-          text: `FEN: ${fen}\nBest move: ${bestMove}\nEvaluation: ${evaluation}\nEngine line: ${variation.join(" ")}`,
-        },
-      ],
+      userParts,
     });
   } catch {
     return `${bestMove} is Stockfish's top choice for this position. Follow the suggested continuation while watching for your opponent's reply.`;
@@ -314,11 +380,11 @@ export async function analyzeCapturedImage(
   }
 
   const apiKey = loadApiKey(settings.provider, window.localStorage);
-  if (!apiKey) {
+  if (!apiKey && settings.provider !== "openai") {
     const providerName = settings.provider === "gemini" ? "Google Gemini" : "OpenRouter";
     throw new Error(`Add an ${providerName} API key in Settings before analyzing a board.`);
   }
-  const provider = getVisionProvider(settings.provider, apiKey);
+  const provider = getVisionProvider(settings.provider, apiKey, settings.openaiBaseUrl);
   const model = modelOverride || settings.model;
   const startedAt = performance.now();
 
@@ -351,6 +417,7 @@ export async function analyzeCapturedImage(
 
   onStage?.("preparing-explanation");
   const explanationStarted = performance.now();
+  const imageUrl = await blobToDataUrl(image);
   const explanation = await explainMove(
     provider,
     model,
@@ -358,6 +425,8 @@ export async function analyzeCapturedImage(
     bestMove.san,
     evaluationDisplay,
     variation,
+    settings,
+    imageUrl,
   );
   const explanationMs = Math.round(performance.now() - explanationStarted);
 

@@ -83,7 +83,32 @@ export async function captureVideoFrame(video: HTMLVideoElement): Promise<Captur
   ) {
     throw new Error("The camera is not ready yet.");
   }
-  return drawSource(video, video.videoWidth, video.videoHeight);
+
+  const targetAspect = 4 / 3;
+  const videoAspect = video.videoWidth / video.videoHeight;
+
+  let sourceX = 0;
+  let sourceY = 0;
+  let sourceW = video.videoWidth;
+  let sourceH = video.videoHeight;
+
+  if (videoAspect > targetAspect) {
+    sourceW = video.videoHeight * targetAspect;
+    sourceX = (video.videoWidth - sourceW) / 2;
+  } else if (videoAspect < targetAspect) {
+    sourceH = video.videoWidth / targetAspect;
+    sourceY = (video.videoHeight - sourceH) / 2;
+  }
+
+  const size = scaledSize(sourceW, sourceH);
+  const canvas = document.createElement("canvas");
+  canvas.width = size.width;
+  canvas.height = size.height;
+  const context = canvas.getContext("2d");
+  if (!context) throw new Error("This browser cannot prepare the captured image.");
+
+  context.drawImage(video, sourceX, sourceY, sourceW, sourceH, 0, 0, size.width, size.height);
+  return { blob: await canvasToJpeg(canvas), ...size };
 }
 
 export async function captureHostScreenshot(

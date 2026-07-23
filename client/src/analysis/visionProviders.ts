@@ -324,7 +324,86 @@ function createGeminiProvider(apiKey: string): VisionProvider {
   };
 }
 
-export function getVisionProvider(provider: VisionProviderId, apiKey: string): VisionProvider {
+function toOpenAiPart(part: ProviderContentPart) {
+  if (part.type === "text") return { type: "text", text: part.text };
+  return { type: "image_url", image_url: { url: part.dataUrl } };
+}
+
+function getOpenAiChatEndpoint(baseUrl: string): string {
+  const trimmed = baseUrl.trim().replace(/\/+$/, "");
+  if (!trimmed) throw new Error("Enter an OpenAI Base URL in Settings.");
+  if (trimmed.endsWith("/chat/completions")) return trimmed;
+  if (trimmed.endsWith("/v1")) return `${trimmed}/chat/completions`;
+  return `${trimmed}/v1/chat/completions`;
+}
+
+function createOpenAiProvider(apiKey: string, baseUrl?: string): VisionProvider {
+  return {
+    async generateContent(params: GenerateContentParams): Promise<string> {
+      const { model, systemPrompt, userParts, temperature, maxTokens, timeoutMs = 45_000 } = params;
+      const endpoint = getOpenAiChatEndpoint(baseUrl || "");
+      const messages: Array<{ role: string; content: unknown }> = [];
+      if (systemPrompt) {
+        messages.push({ role: "system", content: systemPrompt });
+      }
+      messages.push({ role: "user", content: userParts.map(toOpenAiPart) });
+
+      const body: Record<string, unknown> = {
+        model,
+        messages,
+        temperature,
+      };
+      if (maxTokens) body.max_tokens = maxTokens;
+
+      try {
+        const response = await fetchWithTimeout(
+          endpoint,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              ...(apiKey ? { Authorization: `Bearer ${apiKey}` } : {}),
+            },
+            body: JSON.stringify(body),
+          },
+          timeoutMs,
+        );
+
+        let payload: any;
+        try {
+          payload = await response.json();
+        } catch {
+          throw new Error(`OpenAI endpoint returned non-JSON response with status ${response.status}.`);
+        }
+
+        if (!response.ok || payload.error) {
+          const errMsg =
+            payload?.error?.message ||
+            `OpenAI endpoint returned status ${response.status}.`;
+          throw new Error(errMsg);
+        }
+
+        const content = readMessageContent(payload.choices?.[0]?.message?.content);
+        if (!content && content !== "0") {
+          const finishReason = payload.choices?.[0]?.finish_reason;
+          throw new Error(
+            `The selected OpenAI model returned no text${typeof finishReason === "string" ? ` (${finishReason})` : ""}. Try again or choose another model.`,
+          );
+        }
+        return content;
+      } catch (error) {
+        rethrowTimeout(error, timeoutMs);
+      }
+    },
+  };
+}
+
+export function getVisionProvider(
+  provider: VisionProviderId,
+  apiKey: string,
+  baseUrl?: string,
+): VisionProvider {
   if (provider === "gemini") return createGeminiProvider(apiKey);
+  if (provider === "openai") return createOpenAiProvider(apiKey, baseUrl);
   return createOpenRouterProvider(apiKey);
 }

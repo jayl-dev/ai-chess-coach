@@ -3,10 +3,14 @@ import type { AppSettings, VisionProviderId } from "../types/app";
 export const SETTINGS_STORAGE_KEY = "chesscoach.settings.v1";
 export const API_KEY_STORAGE_KEY = "chesscoach.openrouterApiKey.v1";
 export const GEMINI_API_KEY_STORAGE_KEY = "chesscoach.geminiApiKey.v1";
+export const OPENAI_API_KEY_STORAGE_KEY = "chesscoach.openaiApiKey.v1";
 
 export const DEFAULT_SETTINGS: AppSettings = {
   model: "google/gemini-2.5-flash",
   provider: "openrouter",
+  openaiBaseUrl: "",
+  openaiPromptStyle: "llm",
+  openaiA1Pos: "BL",
   recognitionEffort: "low",
   assumeSideToMoveAtBottom: true,
   depth: 12,
@@ -26,9 +30,14 @@ const DEVELOPMENT_API_KEY = import.meta.env.DEV
 const DEVELOPMENT_GEMINI_API_KEY = import.meta.env.DEV
   ? import.meta.env.VITE_DEV_GEMINI_API_KEY?.trim() || ""
   : "";
+const DEVELOPMENT_OPENAI_API_KEY = import.meta.env.DEV
+  ? import.meta.env.VITE_DEV_OPENAI_API_KEY?.trim() || ""
+  : "";
 
 export function defaultModelFor(provider: VisionProviderId): string {
-  return provider === "gemini" ? "gemini-2.5-flash" : DEFAULT_SETTINGS.model;
+  if (provider === "gemini") return "gemini-2.5-flash";
+  if (provider === "openai") return "gpt-4o-mini";
+  return DEFAULT_SETTINGS.model;
 }
 
 export function loadSettings(storage?: Pick<Storage, "getItem">): AppSettings {
@@ -42,9 +51,24 @@ export function loadSettings(storage?: Pick<Storage, "getItem">): AppSettings {
     return {
       model: typeof value.model === "string" ? value.model : DEFAULT_SETTINGS.model,
       provider:
-        value.provider === "gemini" || value.provider === "openrouter"
+        value.provider === "gemini" || value.provider === "openrouter" || value.provider === "openai"
           ? value.provider
           : DEFAULT_SETTINGS.provider,
+      openaiBaseUrl:
+        typeof value.openaiBaseUrl === "string"
+          ? value.openaiBaseUrl.trim()
+          : DEFAULT_SETTINGS.openaiBaseUrl,
+      openaiPromptStyle:
+        value.openaiPromptStyle === "llm" || value.openaiPromptStyle === "livechess2fen"
+          ? value.openaiPromptStyle
+          : DEFAULT_SETTINGS.openaiPromptStyle,
+      openaiA1Pos:
+        value.openaiA1Pos === "BL" ||
+        value.openaiA1Pos === "BR" ||
+        value.openaiA1Pos === "TL" ||
+        value.openaiA1Pos === "TR"
+          ? value.openaiA1Pos
+          : DEFAULT_SETTINGS.openaiA1Pos,
       recognitionEffort:
         value.recognitionEffort === "high" || value.recognitionEffort === "low"
           ? value.recognitionEffort
@@ -143,8 +167,33 @@ export function saveGeminiApiKey(
   }
 }
 
+export function loadOpenAiApiKey(storage?: Pick<Storage, "getItem">): string {
+  if (!storage) return DEVELOPMENT_OPENAI_API_KEY;
+  try {
+    return storage.getItem(OPENAI_API_KEY_STORAGE_KEY)?.trim() || DEVELOPMENT_OPENAI_API_KEY;
+  } catch {
+    return DEVELOPMENT_OPENAI_API_KEY;
+  }
+}
+
+export function saveOpenAiApiKey(
+  apiKey: string | null,
+  storage?: Pick<Storage, "setItem" | "removeItem">,
+) {
+  if (!storage) return false;
+  try {
+    if (apiKey) storage.setItem(OPENAI_API_KEY_STORAGE_KEY, apiKey.trim());
+    else storage.removeItem(OPENAI_API_KEY_STORAGE_KEY);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export function loadApiKey(provider: VisionProviderId, storage?: Pick<Storage, "getItem">): string {
-  return provider === "gemini" ? loadGeminiApiKey(storage) : loadLocalApiKey(storage);
+  if (provider === "gemini") return loadGeminiApiKey(storage);
+  if (provider === "openai") return loadOpenAiApiKey(storage);
+  return loadLocalApiKey(storage);
 }
 
 export function saveApiKey(
@@ -152,7 +201,7 @@ export function saveApiKey(
   apiKey: string | null,
   storage?: Pick<Storage, "setItem" | "removeItem">,
 ): boolean {
-  return provider === "gemini"
-    ? saveGeminiApiKey(apiKey, storage)
-    : saveLocalApiKey(apiKey, storage);
+  if (provider === "gemini") return saveGeminiApiKey(apiKey, storage);
+  if (provider === "openai") return saveOpenAiApiKey(apiKey, storage);
+  return saveLocalApiKey(apiKey, storage);
 }

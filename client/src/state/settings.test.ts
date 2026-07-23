@@ -40,17 +40,34 @@ describe("settings persistence", () => {
   it("stores provider API keys independently", () => {
     expect(saveApiKey("openrouter", "openrouter-key", window.localStorage)).toBe(true);
     expect(saveApiKey("gemini", "gemini-key", window.localStorage)).toBe(true);
+    expect(saveApiKey("openai", "openai-key", window.localStorage)).toBe(true);
 
     expect(loadApiKey("openrouter", window.localStorage)).toBe("openrouter-key");
     expect(loadApiKey("gemini", window.localStorage)).toBe("gemini-key");
+    expect(loadApiKey("openai", window.localStorage)).toBe("openai-key");
 
     expect(saveApiKey("gemini", null, window.localStorage)).toBe(true);
     expect(loadApiKey("openrouter", window.localStorage)).toBe("openrouter-key");
+    expect(loadApiKey("openai", window.localStorage)).toBe("openai-key");
     expect(loadApiKey("gemini", window.localStorage)).toBe("");
   });
 
   it("uses provider-compatible default models", () => {
     expect(defaultModelFor("openrouter")).toBe("google/gemini-2.5-flash");
     expect(defaultModelFor("gemini")).toBe("gemini-2.5-flash");
+    expect(defaultModelFor("openai")).toBe("gpt-4o-mini");
+  });
+
+  it("persists openaiBaseUrl, openaiPromptStyle, and openaiA1Pos", () => {
+    const settings = {
+      ...DEFAULT_SETTINGS,
+      provider: "openai" as const,
+      openaiBaseUrl: "http://localhost:8080/v1",
+      openaiPromptStyle: "livechess2fen" as const,
+      openaiA1Pos: "TR" as const,
+    };
+
+    saveSettings(settings, window.localStorage);
+    expect(loadSettings(window.localStorage)).toEqual(settings);
   });
 });

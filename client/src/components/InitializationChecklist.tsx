@@ -34,13 +34,15 @@ type Props = {
 
 const STARTING_POSITION = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 function apiKeyLabel(provider: VisionProviderId): string {
-  return provider === "gemini" ? "Google Gemini API key" : "OpenRouter API key";
+  if (provider === "gemini") return "Google Gemini API key";
+  if (provider === "openai") return "OpenAI-compatible API key";
+  return "OpenRouter API key";
 }
 const LABELS: Record<CheckId, string> = {
   camera: "Camera permission",
   stockfish: "Stockfish engine",
   opencv: "OpenCV board tools",
-  apiKey: "OpenRouter API key",
+  apiKey: "Vision API key",
 };
 
 let cachedChecks: Partial<Record<CheckId, Promise<CheckResult>>> = {};
@@ -176,7 +178,12 @@ async function boardProcessorCheck(): Promise<CheckResult> {
 }
 
 function apiKeyCheck(provider: VisionProviderId): Promise<CheckResult> {
-  const providerName = provider === "gemini" ? "Gemini" : "OpenRouter";
+  const providerName =
+    provider === "gemini"
+      ? "Gemini"
+      : provider === "openai"
+        ? "OpenAI Compatible"
+        : "OpenRouter";
   const key = loadApiKey(provider, window.localStorage);
   if (!key) {
     return Promise.resolve<CheckResult>({

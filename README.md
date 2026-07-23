@@ -48,6 +48,27 @@ Open `http://localhost:5173`. Vite listens on all interfaces during development,
 
 Add an API key from the app's Settings screen. Keys and settings are stored in browser storage for the current origin.
 
+## Vision Providers & Local LLM Setup
+
+Chess Coach supports cloud vision providers as well as local OpenAI-compatible vision models:
+
+### 1. Cloud Vision APIs
+* **Google Gemini (Direct)**: Fast and highly accurate for both physical board photos and digital screenshots.
+* **OpenRouter**: Access to multimodal models such as Gemini 2.5 Flash, GPT-4o, and Claude 3.5 Sonnet.
+
+### 2. OpenAI-Compatible & Local LLMs (Ollama / LM Studio)
+You can run vision models 100% locally by selecting **OpenAI Compatible** in Settings:
+* **Ollama**: Set Base URL to `http://localhost:11434/v1`
+* **LM Studio / vLLM**: Set Base URL to `http://localhost:1234/v1` (or your local server port)
+* **Prompt Format**: Choose **Vision LLM Prompt**
+* **Recommended Local Models**: `qwen2.5-vl:7b` or `llama3.2-vision:11b`.
+
+### 3. Specialized Model: LiveChess2FEN
+Supports the specialized [LiveChess2FEN](https://github.com/jayl-dev/LiveChess2FEN) OpenAI-compatible image-to-FEN service:
+* **Prompt Format**: Choose **LiveChess2FEN Prompt** (with `a1_pos` parameter).
+* **Target Usage**: LiveChess2FEN is designed and optimized specifically for physical 3D chess boards rather than digital screen captures.
+* **Accuracy Note**: In benchmarking and testing, modern general-purpose vision LLMs (such as Gemini 2.5 Flash, GPT-4o, or Qwen 2.5 VL) generally outperform specialized vision models on both physical and digital board recognition—especially when **Recognition Effort** is set to **High** (which enables square-by-square self-verification).
+
 ## Optional screenshot host
 
 Camera mode does not need a server. To capture a chess board shown on a Windows or macOS computer, run the optional host on that computer in a second terminal:

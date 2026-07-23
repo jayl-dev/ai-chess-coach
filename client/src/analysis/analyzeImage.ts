@@ -170,7 +170,7 @@ async function recognizePosition(
         { type: "image", dataUrl: imageUrl },
       ],
     });
-    let parsed = parseJson<VisionPosition>(content);
+    const parsed = parseJson<VisionPosition>(content);
     if (!parsed || typeof parsed.fen !== "string") {
       throw new Error("The vision model did not return a FEN position.");
     }

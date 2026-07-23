@@ -166,7 +166,7 @@ export async function fetchOpenAiModels(
         ...(apiKey ? { Authorization: `Bearer ${apiKey}` } : {}),
       },
     });
-  } catch (error) {
+  } catch {
     return { models: FALLBACK_OPENAI_MODELS };
   }
 
@@ -174,9 +174,9 @@ export async function fetchOpenAiModels(
     return { models: FALLBACK_OPENAI_MODELS };
   }
 
-  let body: any;
+  let body: { data?: unknown[]; models?: unknown[] };
   try {
-    body = await response.json();
+    body = (await response.json()) as { data?: unknown[]; models?: unknown[] };
   } catch {
     return { models: FALLBACK_OPENAI_MODELS };
   }
@@ -190,7 +190,7 @@ export async function fetchOpenAiModels(
     return { models: FALLBACK_OPENAI_MODELS };
   }
 
-  const models: VisionModel[] = modelList.map((m: any) => {
+  const models: VisionModel[] = (modelList as Array<Record<string, unknown>>).map((m) => {
     const id =
       typeof m.id === "string"
         ? m.id
@@ -342,16 +342,20 @@ export async function testOpenAiConnection(
   if (!response.ok) {
     let message = `OpenAI endpoint returned status ${response.status}.`;
     try {
-      const errJson = await response.json();
-      if (errJson?.error?.message) message = errJson.error.message;
-    } catch {}
+      const errJson = (await response.json()) as { error?: { message?: unknown } };
+      if (typeof errJson?.error?.message === "string") message = errJson.error.message;
+    } catch {
+      // Keep default message
+    }
     throw new ApiError(message, response.status);
   }
 
   let hostLabel = "OpenAI Compatible";
   try {
     hostLabel = new URL(endpoint).host;
-  } catch {}
+  } catch {
+    // Keep default hostLabel
+  }
 
   return {
     ok: true as const,

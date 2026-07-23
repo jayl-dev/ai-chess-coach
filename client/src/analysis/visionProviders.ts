@@ -369,17 +369,24 @@ function createOpenAiProvider(apiKey: string, baseUrl?: string): VisionProvider 
           timeoutMs,
         );
 
-        let payload: any;
+        let payload: {
+          error?: { message?: unknown };
+          choices?: Array<{ message?: { content?: unknown }; finish_reason?: unknown }>;
+        };
         try {
-          payload = await response.json();
+          payload = (await response.json()) as {
+            error?: { message?: unknown };
+            choices?: Array<{ message?: { content?: unknown }; finish_reason?: unknown }>;
+          };
         } catch {
           throw new Error(`OpenAI endpoint returned non-JSON response with status ${response.status}.`);
         }
 
         if (!response.ok || payload.error) {
           const errMsg =
-            payload?.error?.message ||
-            `OpenAI endpoint returned status ${response.status}.`;
+            typeof payload?.error?.message === "string" && payload.error.message.trim()
+              ? payload.error.message.trim()
+              : `OpenAI endpoint returned status ${response.status}.`;
           throw new Error(errMsg);
         }
 

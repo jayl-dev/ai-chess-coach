@@ -8,7 +8,7 @@ const CURATED_MODEL_IDS = [
   "google/gemini-2.5-flash",
   "google/gemini-2.5-flash-lite",
   "google/gemini-3-flash-preview",
-  "openai/gpt-4o-mini",
+  "~openai/gpt-mini-latest",
   "anthropic/claude-sonnet-5",
 ] as const;
 
@@ -229,7 +229,11 @@ export function fetchVisionModels(
 }
 
 const GEMINI_BASE_URL = "https://generativelanguage.googleapis.com/v1beta";
-const CURATED_GEMINI_MODEL_IDS = ["gemini-2.5-flash", "gemini-2.5-flash-lite", "gemini-2.5-pro"];
+const CURATED_GEMINI_MODEL_IDS = [
+  "gemini-flash-latest",
+  "gemini-2.5-flash-lite",
+  "gemini-2.5-pro",
+];
 const FREE_GEMINI_MODEL_IDS = new Set(CURATED_GEMINI_MODEL_IDS);
 
 type GeminiModel = {

@@ -53,8 +53,8 @@ describe("settings persistence", () => {
   });
 
   it("uses provider-compatible default models", () => {
-    expect(defaultModelFor("openrouter")).toBe("google/gemini-2.5-flash");
-    expect(defaultModelFor("gemini")).toBe("gemini-2.5-flash");
+    expect(defaultModelFor("openrouter")).toBe("~openai/gpt-mini-latest");
+    expect(defaultModelFor("gemini")).toBe("gemini-flash-latest");
     expect(defaultModelFor("openai")).toBe("gpt-4o-mini");
   });
 

@@ -28,6 +28,8 @@ type Props = {
   autoCropBoard: boolean;
   liveBoardGuide: boolean;
   provider: VisionProviderId;
+  openaiBaseUrl: string;
+  hasApiKey: boolean;
   onAutoCropBoardChange: (enabled: boolean) => void;
   onContinue: () => void;
 };
@@ -46,7 +48,6 @@ const LABELS: Record<CheckId, string> = {
 };
 
 let cachedChecks: Partial<Record<CheckId, Promise<CheckResult>>> = {};
-let cachedApiKeyProvider: VisionProviderId | null = null;
 
 function withTimeout<T>(promise: Promise<T>, timeoutMs: number, message: string): Promise<T> {
   return new Promise<T>((resolve, reject) => {
@@ -177,7 +178,7 @@ async function boardProcessorCheck(): Promise<CheckResult> {
   }
 }
 
-function apiKeyCheck(provider: VisionProviderId): Promise<CheckResult> {
+function apiKeyCheck(provider: VisionProviderId, openaiBaseUrl: string): Promise<CheckResult> {
   const providerName =
     provider === "gemini"
       ? "Gemini"
@@ -192,7 +193,7 @@ function apiKeyCheck(provider: VisionProviderId): Promise<CheckResult> {
     });
   }
   return withTimeout(
-    testVisionConnection(provider, key),
+    testVisionConnection(provider, key, openaiBaseUrl),
     10_000,
     `${providerName} key validation did not respond within 10 seconds.`,
   )
@@ -220,6 +221,7 @@ function getCheck(
   autoCropBoard: boolean,
   liveBoardGuide: boolean,
   provider: VisionProviderId,
+  openaiBaseUrl: string,
 ): Promise<CheckResult> {
   if (id === "opencv" && !autoCropBoard && !liveBoardGuide) {
     return Promise.resolve({
@@ -228,12 +230,7 @@ function getCheck(
     });
   }
   if (id === "apiKey") {
-    if (cachedApiKeyProvider !== provider) {
-      cachedChecks.apiKey = undefined;
-      cachedApiKeyProvider = provider;
-    }
-    if (!cachedChecks.apiKey) cachedChecks.apiKey = apiKeyCheck(provider);
-    return cachedChecks.apiKey as Promise<CheckResult>;
+    return apiKeyCheck(provider, openaiBaseUrl);
   }
   if (!cachedChecks[id]) cachedChecks[id] = RUNNERS[id]();
   return cachedChecks[id] as Promise<CheckResult>;
@@ -252,6 +249,8 @@ export function InitializationChecklist({
   autoCropBoard,
   liveBoardGuide,
   provider,
+  openaiBaseUrl,
+  hasApiKey,
   onAutoCropBoardChange,
   onContinue,
 }: Props) {
@@ -268,7 +267,7 @@ export function InitializationChecklist({
     );
     let cancelled = false;
     for (const id of Object.keys(LABELS) as CheckId[]) {
-      void getCheck(id, autoCropBoard, liveBoardGuide, provider).then((result) => {
+      void getCheck(id, autoCropBoard, liveBoardGuide, provider, openaiBaseUrl).then((result) => {
         if (cancelled) return;
         setChecks((current) =>
           current.map((check) => (check.id === id ? { ...check, ...result } : check)),
@@ -278,7 +277,7 @@ export function InitializationChecklist({
     return () => {
       cancelled = true;
     };
-  }, [autoCropBoard, liveBoardGuide, provider, runId]);
+  }, [autoCropBoard, liveBoardGuide, provider, openaiBaseUrl, hasApiKey, runId]);
 
   useEffect(() => {
     if (!navigator.permissions?.query) return;
@@ -342,7 +341,6 @@ export function InitializationChecklist({
 
   const retry = () => {
     cachedChecks = {};
-    cachedApiKeyProvider = null;
     setChecks(initialChecks(provider));
     setRunId((value) => value + 1);
   };

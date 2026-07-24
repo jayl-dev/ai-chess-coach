@@ -309,7 +309,7 @@ async function explainMove(
       model,
       temperature: 0.35,
       maxTokens: 150,
-      timeoutMs: 20_000,
+      timeoutMs: settings.provider === "openai" ? 120_000 : 20_000,
       systemPrompt:
         "You are a friendly chess coach. Explain the engine move accurately in one to three short sentences. Do not invent tactics not supported by the supplied line.",
       userParts,

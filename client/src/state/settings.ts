@@ -5,8 +5,12 @@ export const API_KEY_STORAGE_KEY = "chesscoach.openrouterApiKey.v1";
 export const GEMINI_API_KEY_STORAGE_KEY = "chesscoach.geminiApiKey.v1";
 export const OPENAI_API_KEY_STORAGE_KEY = "chesscoach.openaiApiKey.v1";
 
+const DEFAULT_OPENROUTER_MODEL = "~openai/gpt-mini-latest";
+const DEFAULT_GEMINI_MODEL = "gemini-flash-latest";
+const DEFAULT_OPENAI_MODEL = "gpt-4o-mini";
+
 export const DEFAULT_SETTINGS: AppSettings = {
-  model: "google/gemini-2.5-flash",
+  model: DEFAULT_OPENROUTER_MODEL,
   provider: "openrouter",
   openaiBaseUrl: "",
   openaiPromptStyle: "llm",
@@ -35,9 +39,9 @@ const DEVELOPMENT_OPENAI_API_KEY = import.meta.env.DEV
   : "";
 
 export function defaultModelFor(provider: VisionProviderId): string {
-  if (provider === "gemini") return "gemini-2.5-flash";
-  if (provider === "openai") return "gpt-4o-mini";
-  return DEFAULT_SETTINGS.model;
+  if (provider === "gemini") return DEFAULT_GEMINI_MODEL;
+  if (provider === "openai") return DEFAULT_OPENAI_MODEL;
+  return DEFAULT_OPENROUTER_MODEL;
 }
 
 export function loadSettings(storage?: Pick<Storage, "getItem">): AppSettings {

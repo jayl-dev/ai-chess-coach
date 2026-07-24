@@ -340,7 +340,7 @@ function getOpenAiChatEndpoint(baseUrl: string): string {
 function createOpenAiProvider(apiKey: string, baseUrl?: string): VisionProvider {
   return {
     async generateContent(params: GenerateContentParams): Promise<string> {
-      const { model, systemPrompt, userParts, temperature, maxTokens, timeoutMs = 45_000 } = params;
+      const { model, systemPrompt, userParts, temperature, maxTokens, timeoutMs = 120_000 } = params;
       const endpoint = getOpenAiChatEndpoint(baseUrl || "");
       const messages: Array<{ role: string; content: unknown }> = [];
       if (systemPrompt) {
@@ -352,7 +352,7 @@ function createOpenAiProvider(apiKey: string, baseUrl?: string): VisionProvider 
         model,
         messages,
         temperature,
-      };
+              };
       if (maxTokens) body.max_tokens = maxTokens;
 
       try {

@@ -53,9 +53,10 @@ const FALLBACK_OPENROUTER_MODELS: VisionModel[] = [
     isFree: false,
   },
   {
-    id: "openai/gpt-4o-mini",
-    name: "GPT-4o mini",
-    description: "Compact curated vision option. Live model details are temporarily unavailable.",
+    id: "~openai/gpt-mini-latest",
+    name: "OpenAI GPT Mini Latest",
+    description:
+      "Latest OpenAI GPT Mini vision model. Live model details are temporarily unavailable.",
     contextLength: null,
     isCurated: true,
     isFree: false,
@@ -72,9 +73,10 @@ const FALLBACK_OPENROUTER_MODELS: VisionModel[] = [
 
 const FALLBACK_GEMINI_MODELS: VisionModel[] = [
   {
-    id: "gemini-2.5-flash",
-    name: "Gemini 2.5 Flash",
-    description: "Fast image-capable model. Live model details are temporarily unavailable.",
+    id: "gemini-flash-latest",
+    name: "Gemini Flash Latest",
+    description:
+      "Latest Gemini Flash multimodal model. Live model details are temporarily unavailable.",
     contextLength: null,
     isCurated: true,
     isFree: true,

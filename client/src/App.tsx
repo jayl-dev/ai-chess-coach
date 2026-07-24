@@ -115,6 +115,8 @@ export default function App() {
             autoCropBoard={settings.autoCropBoard}
             liveBoardGuide={settings.liveBoardGuide}
             provider={settings.provider}
+            openaiBaseUrl={settings.openaiBaseUrl}
+            hasApiKey={hasApiKey}
             onAutoCropBoardChange={(autoCropBoard) => updateSettings({ autoCropBoard })}
             onContinue={() => setShowInitialization(false)}
           />

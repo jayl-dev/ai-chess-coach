@@ -370,12 +370,15 @@ export function testVisionConnection(
   apiKey?: string,
   baseUrl?: string,
 ): Promise<ConnectionTestResponse> {
-  if (provider === "gemini") return testGeminiConnection(apiKey);
+  const effectiveApiKey =
+    apiKey?.trim() || loadApiKey(provider, window.localStorage) || undefined;
+
+  if (provider === "gemini") return testGeminiConnection(effectiveApiKey);
   if (provider === "openai") {
     if (!baseUrl?.trim()) return Promise.reject(new ApiError("Enter an OpenAI Base URL first.", 400));
-    return testOpenAiConnection(baseUrl.trim(), apiKey);
+    return testOpenAiConnection(baseUrl.trim(), effectiveApiKey);
   }
-  return testOpenRouterConnection(apiKey);
+  return testOpenRouterConnection(effectiveApiKey);
 }
 
 export async function testGeminiConnection(apiKey?: string): Promise<ConnectionTestResponse> {
